@@ -1,7 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
-// import App from '../App';
 import reportWebVitals from './reportWebVitals';
 import BuildingForm from './components/BuildingForm';
 import PersonForm from './components/PersonForm';
@@ -9,26 +8,24 @@ import BuildingUnit from './components/BuildingUnit';
 import Warehouse from './components/Warehouse';
 import Parking from './components/Parking';
 import Menu from './components/Menu';
-import Menu2 from './components/Menu2';
 import NavBar from './components/NavBar';
-import { LoadingProvider } from '../src/context/LoadingContext';
+import { Provider } from 'react-redux';
+import store from './store';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
-    <LoadingProvider>
-      {/* <App /> */}
+    <Provider store={store}>
       <NavBar />
       <div className="flex">
-        <Menu />
-        {/* <Menu2 /> */}
+        <Menu className="z-10" />
         {/* <BuildingForm /> */}
         {/* <PersonForm /> */}
         {/* <BuildingUnit /> */}
         {/* <Warehouse /> */}
         {/* <Parking /> */}
       </div>
-    </LoadingProvider>
+    </Provider>
   </React.StrictMode>
 );
 

@@ -1,22 +1,52 @@
-import { useState, useContext } from 'react';
+import { useState, useContext, useEffect } from 'react';
 import PersonForm from './PersonForm';
 import Parking from './Parking';
 import BuildingForm from './BuildingForm';
 import BuildingUnit from './BuildingUnit';
 import Warehouse from './Warehouse';
-import { LoadingContext } from '../context/LoadingContext';
 
 const Menu = () => {
-  const [selectedComponent, setSelectedComponent] = useState(null);
-  const { loading } = useContext(LoadingContext);
+  const [selectedComponent, setSelectedComponent] = useState('');
+  const [isBuildingFormLoading, setIsBuildingFormLoading] = useState(false);
+
+  // const componentMap = {
+  //   PersonForm: <PersonForm />,
+  //   BuildingForm: <BuildingForm />,
+  //   BuildingUnit: <BuildingUnit />,
+  //   Warehouse: <Warehouse />,
+  //   Parking: <Parking />,
+  // };
+  // let renderedComponent = componentMap[selectedComponent];
+
+  // const handleClick = (component) => {
+  //   // console.log('handleClick component: ', component);
+  //   if (component !== 'BuildingForm' || !loading) {
+  //     setSelectedComponent(component);
+  //   }
+  //   // console.log('selectedComponent: ', selectedComponent);
+  // };
+  // const handleClick = (component) => {
+  //   if (component !== 'BuildingForm' || !loading) {
+  //     setSelectedComponent(component);
+  //   }
+  // };
+  // useEffect(() => {
+  //   if (selectedComponent !== 'BuildingForm') {
+  //     setIsBuildingFormLoading(false);
+  //   }
+  // }, [selectedComponent, isBuildingFormLoading]);
 
   const handleClick = (component) => {
-    // console.log('handleClick component: ', component);
-    if (component !== 'BuildingForm' || !loading) {
-      setSelectedComponent(component);
-    }
-    // console.log('selectedComponent: ', selectedComponent);
+    setSelectedComponent(component);
   };
+  // const handleClick = (component) => {
+  //   if (component === 'BuildingForm') {
+  //     setIsBuildingFormLoading(loading);
+  //   }
+  //   if (component !== 'BuildingForm' || !isBuildingFormLoading) {
+  //     setSelectedComponent(component);
+  //   }
+  // };
 
   let renderedComponent;
   if (selectedComponent === 'PersonForm') {
@@ -37,50 +67,60 @@ const Menu = () => {
       <div>
         <ul className="flex flex-col">
           <li className="flex-1 mr-2">
-            <a
-              className="text-center block border border-blue-500 rounded py-2 px-4 bg-blue-500 hover:bg-blue-700 text-white"
-              href="#"
-              onClick={() => handleClick('PersonForm')}
+            <div
+              className="text-center block border border-blue-500 rounded py-2 px-4 bg-blue-500 hover:bg-blue-700 text-white cursor-pointer"
+              onClick={(e) => {
+                e.preventDefault();
+                handleClick('PersonForm');
+              }}
             >
               کاربران
-            </a>
+            </div>
           </li>
           <li className="flex-1 mr-2">
-            <a
-              className="text-center block border border-white rounded hover:border-gray-200 text-blue-500 hover:bg-gray-200 py-2 px-4"
-              href="#"
-              onClick={() => handleClick('BuildingForm')}
+            <div
+              className="text-center block border border-white rounded hover:border-gray-200 text-blue-500 hover:bg-gray-200 py-2 px-4 cursor-pointer"
+              onClick={(e) => {
+                e.preventDefault();
+                handleClick('BuildingForm');
+              }}
             >
               ساختمان ها{' '}
-            </a>
+            </div>
           </li>
           <li className="flex-1 mr-2">
-            <a
-              className="text-center block border border-blue-500 rounded py-2 px-4 bg-blue-500 hover:bg-blue-700 text-white"
-              href="#"
-              onClick={() => handleClick('BuildingUnit')}
+            <div
+              className="text-center block border border-blue-500 rounded py-2 px-4 bg-blue-500 hover:bg-blue-700 text-white cursor-pointer"
+              onClick={(e) => {
+                // e.preventDefault();
+                handleClick('BuildingUnit');
+              }}
             >
               واحدهای ساختمان{' '}
-            </a>
+            </div>
           </li>
 
           <li className="flex-1 mr-2">
-            <a
-              className="text-center block border border-white rounded hover:border-gray-200 text-blue-500 hover:bg-gray-200 py-2 px-4"
-              href="#"
-              onClick={() => handleClick('Warehouse')}
+            <div
+              className="text-center block border border-white rounded hover:border-gray-200 text-blue-500 hover:bg-gray-200 py-2 px-4 cursor-pointer"
+              onClick={(e) => {
+                e.preventDefault();
+                handleClick('Warehouse');
+              }}
             >
               انباری ها{' '}
-            </a>
+            </div>
           </li>
           <li className="flex-1 mr-2">
-            <a
-              className="text-center block border border-blue-500 rounded py-2 px-4 bg-blue-500 hover:bg-blue-700 text-white"
-              href="#"
-              onClick={() => handleClick('Parking')}
+            <div
+              className="text-center block border border-blue-500 rounded py-2 px-4 bg-blue-500 hover:bg-blue-700 text-white cursor-pointer"
+              onClick={(e) => {
+                e.preventDefault();
+                handleClick('Parking');
+              }}
             >
               پارکینگ ها
-            </a>
+            </div>
           </li>
           {/* <li className="text-center flex-1">
           <a

@@ -1,9 +1,17 @@
 import axios from 'axios';
 import { useContext, useEffect, useRef, useState } from 'react';
-import { LoadingContext } from '../context/LoadingContext';
+import { useDispatch, useSelector } from 'react-redux';
+import {
+  setBuildings,
+  addBuilding,
+  updateBuilding,
+  deleteBuilding,
+} from '../reducers/buildings';
+import { fetchBuildings } from '../reducers/buildings';
 
 const BuildingForm = () => {
-  const [buildings, setBuildings] = useState([]);
+  // const [buildings, setBuildings] = useState([]);
+  // const buildings = useSelector((state) => state.buildings.buildings);
   const [name, setName] = useState('');
   const [address, setAddress] = useState('');
   const [Plak, setPlak] = useState('');
@@ -12,31 +20,46 @@ const BuildingForm = () => {
   const [editId, setEditId] = useState(null);
 
   const isMounted = useRef(false);
-  const { loading, setLoading } = useContext(LoadingContext);
 
-  const fetchBuildings = () => {
-    setLoading(true);
-    axios
-      .get('http://82.115.18.198:4000/api/buildings')
-      .then((res) => {
-        if (isMounted.current) setBuildings(res.data);
-        setLoading(false);
-      })
-      .catch((err) => {
-        console.log(err);
-        setLoading(false);
-      });
-  };
+  // const fetchBuildings = () => {
+  //   setLoading(true);
+  //   axios
+  //     .get('http://82.115.18.198:4000/api/buildings')
+  //     .then((res) => {
+  //       if (isMounted.current) setBuildings(res.data);
+  //       setLoading(false);
+  //     })
+  //     .catch((err) => {
+  //       console.log(err);
+  //       setLoading(false);
+  //     });
+  // };
+
+  // console.log(buildings);
+  const dispatch = useDispatch();
+  const buildings = useSelector((state) => state.buildings.buildings);
+  const buildingStatus = useSelector((state) => state.buildings.status);
+  const error = useSelector((state) => state.buildings.error);
+
   useEffect(() => {
-    isMounted.current = true;
-    fetchBuildings();
-    return () => {
-      isMounted.current = false; // set to false when component unmounts
-    };
-  }, []);
+    if (buildingStatus === 'idle') {
+      dispatch(fetchBuildings());
+    }
+  }, [buildingStatus, dispatch]);
 
-  console.log(buildings);
-
+  // const fetchBuildings = () => {
+  //   setLoading(true);
+  //   axios
+  //     .get('http://82.115.18.198:4000/api/buildings')
+  //     .then((res) => {
+  //       dispatch(setBuildings(res.data));
+  //       setLoading(false);
+  //     })
+  //     .catch((err) => {
+  //       console.log(err);
+  //       setLoading(false);
+  //     });
+  // };
   const handleUpdate = (id) => {
     const updatedData = buildings?.find((building) => building?.id === id);
     if (updatedData) {
@@ -60,11 +83,12 @@ const BuildingForm = () => {
           description,
         })
         .then((res) => {
-          setBuildings(
-            buildings.map((building) =>
-              building.id === editId ? res.data : building
-            )
-          );
+          // setBuildings(
+          //   buildings.map((building) =>
+          //     building.id === editId ? res.data : building
+          //   )
+          // );
+          dispatch(updateBuilding({ id: editId, data: res.data }));
           // setEditMode(false);
           setEditId(null);
           setName('');
@@ -72,7 +96,7 @@ const BuildingForm = () => {
           setAddress('');
           setFloorsCount('');
           setDescription('');
-          fetchBuildings();
+          dispatch(fetchBuildings());
         })
         .catch((err) => console.log(err));
     } else {
@@ -85,13 +109,14 @@ const BuildingForm = () => {
           description,
         })
         .then((res) => {
-          setBuildings([...buildings, res.data]);
+          // setBuildings([...buildings, res.data]);
+          dispatch(addBuilding(res.data));
           setName('');
           setAddress('');
           setPlak('');
           setFloorsCount('');
           setDescription('');
-          fetchBuildings();
+          dispatch(fetchBuildings());
         })
         .catch((err) => console.log(err));
     }
@@ -111,7 +136,8 @@ const BuildingForm = () => {
     axios
       .delete(`http://82.115.18.198:4000/api/buildings/${id}`)
       .then((res) =>
-        setBuildings(buildings.filter((building) => building.id !== id))
+        // setBuildings(buildings.filter((building) => building.id !== id))
+        dispatch(deleteBuilding(id))
       )
       .then((data) => fetchBuildings())
       .catch((err) => console.log(err));
